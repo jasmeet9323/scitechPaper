@@ -293,6 +293,10 @@ After these encroached points and their corresponding encroached edges are ident
     \label{front-redef}
 \end{figure}
 
+\subsection{Combining Triangular Elements to Quads}
+
+Generating advancing layers over the surface proceeds by creating triangular elements. which could be easily converted into quadrilateral elements.
+
 \section{Overall Mesh Generation Algorithm}
 
 In the previous section, we have detailed the steps in the advancing layer mesh generation routine. Here, we summarize the algorithm in the form of a pseudo code in Algorithm \ref{algo}.
@@ -324,7 +328,7 @@ In the previous section, we have detailed the steps in the advancing layer mesh 
 
 \section{Assumptions}
 
-We make a few assumptions on the input triangulation for our mesh generation algorithm to successfully create a valid mesh. The first one is that the triangulation of the surface is fine enough to resolve the geometric complexities in the object. If the input triangulation is too coarse, the encroaching interior vertex deletion subroutine will create mesh elements that deviate significantly from the surface or even fail. However, this issue can be tackled by refining the triangulation using any isotropic refinement algorithm as long as it retains the features of the input object. Coarse triangulations are acceptable for objects without any geometric complexities.
+We make a few assumptions on the input triangulation for our mesh generation algorithm to successfully create a valid mesh. The first one is that the triangulation of the surface is fine enough to resolve the geometric complexities in the object. If the input triangulation is too coarse, the encroaching interior vertex deletion subroutine will create mesh elements that deviate significantly from the surface or even fail. Hence, for highly curved regions of the surface, the input triangulation should be within 30 degrees deviation of the surface. However, this issue can be tackled by refining the triangulation using any isotropic refinement algorithm as long as it retains the features of the input object. Coarse triangulations are acceptable for objects without any geometric complexities.
 
 Another assumption we have made for the input triangulation is that it would have well defined boundaries where the advancing layers can march out from. For future, we intend to incorporate a subroutine that identifies these boundaries even on objects which don't have well defined features, for eg. leading edge of an airfoil. Accepting boundary elements as a user input is also an option for such objects.
 

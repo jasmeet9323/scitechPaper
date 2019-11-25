@@ -301,7 +301,7 @@ Generating advancing layers over the surface proceeds by inserting points in the
 
 \subsection{Smoothing}
 
-Applying a smoothing methodology to a boundary layer mesh is problematic. On the one hand, smoothing improves the mesh element quality, while on the other hand it can diffuse the boundary topology in the mesh. Hence, Laplacian smoothing will not serve the purpose. Optimization based approaches are also employed to smooth the mesh by moving the mesh so as to maximize a quality metric\cite{canann1998approach}. However, even in such approaches, the boundary layers of the mesh are kept fixed and the interior of the mesh is smoothed. This approach is also computationally intensive. The smoothing methodology that we use for the advancing layer mesh is physically-based smoothing. The mesh nodes exert forces on each other and hence, each mesh node is moved so as to balance out all the forces. This procedure of smoothing is also called as spring based smoothing as the edges of the mesh act as springs which pull or push the mesh nodes away or towards each other.
+Applying a smoothing methodology to a boundary layer mesh is non-trivial. On the one hand, smoothing improves the mesh element quality, while on the other hand it can diffuse the boundary topology in the advancing layers of the mesh. Hence, a simple Laplacian smoothing will not serve the purpose. Optimization based approaches could be employed to smooth the mesh by moving the mesh nodes so as to maximize a quality metric\cite{canann1998approach}. However, even in such approaches, the boundary layers of the mesh are kept fixed and the isotropic regions of the mesh are smoothed. Additionally, this approach is quite computationally intensive. The smoothing methodology that we use for the advancing layer mesh is physically-based smoothing. The mesh nodes exert forces on each other and hence, each mesh node is moved so as to balance out all the forces. This procedure of smoothing is also called as spring based smoothing as the edges of the mesh act as springs which pull or push the mesh nodes away or towards each other.
 
 Several spring forces are applied to a given mesh node in the smoothing procedure. Each spring constant is denoted by $k_{spring}$. The forces are -
 
@@ -318,14 +318,22 @@ f_{kid} = k_{extrusion} * \frac{l_{real} - l_{ideal}}{l_{real} + l_{ideal}} * (k
 \begin{equation}
 f_{neighbour} = k_{neighbour} * \frac{(vertLocation - leftVertLocation) + (vertLocation - rightVertLocation)}{ 2.0};
 \end{equation}
-\item \textbf{Original location} - a force is added to restrict the movement of the vertex from the location at which it was placed in the mesh before smoothing
+\item \textbf{Original location} - a force is added to restrict the movement of the vertex from the location at which it was placed in the mesh before smoothing. This term also ensures that the deviation of the mesh nodes from the initial surface representation is as little as possible.
 \begin{equation}
 f_{original} = k_{original} * (origialLocation - currentLocation)
 \end{equation}
+\begin{equation}
+\end{equation}
 \end{itemize}
 
-These forces are summed up to give the mesh node a resultant force and the node is moved according to the total force. Several iterations (around 5-10) of smoothing are done per layer as the mesh advances towards surface interior.
+These forces are summed up to give the mesh node a resultant force and the node is moved according to the total force. Several iterations (around 5-10) of smoothing are done per layer as the mesh advances towards surface interior. A limit is set to the vertex movement per smoothing iteration. The distance a vertex moves per iteration of the smoothing algorithm is kept at $5\%$ of the extrusion length at that vertex. This helps in limiting the movement of the vertex when the initial boundary discretization is too coarse.
 
+\begin{figure}
+\centering
+\includegraphics[scale=0.3]{smoothing/smoothing-comparison-cylinder-cap.eps}
+\caption{Zoomed in view of smoothing applied to an advancing layer surface mesh. Dark blue lines represent smooth mesh and flat red lines represent the mesh without smoothing. We can see that the smoothed version of the mesh helps to attain uniform aspect ratio at each layer.}
+\label{fig-smoothing-cylinder}
+\end{figure}
 %TODO: Mesh smoothing add a figure
 
 \section{Overall Mesh Generation Algorithm}

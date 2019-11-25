@@ -218,7 +218,7 @@ As the advancing front marches into the surface, vertices in the interior of the
     \label{collapse-eq}
 \end{equation}
 
-Here $d$ is the distance between the point on the advancing front and the interior point, $l_1$ and $l_2$ are the lengths of adjacent edges of the point on the front, c is a constant whose value is set as $\sqrt{2}$ and $extrudeLength$ is the extrusion length at the vertex on the front. This condition ensures decimation of vertices in surface interior which are close to the advancing front and avoids any encroachment of surface interior vertices on the advancing layers. Topological and geometrical checks are done before an edge can be collapsed. These include a threshold for the ratio of area of generated triangles and a limit on the dihedral angle between the adjacent triangles created by the collapse. The area threshold is set to be $10^8$. Also, edge-collapse is successful only if the triangles resulting from it are be within a limit of $\theta < \ang{30}$ from the surface(see Figure \ref{deviation-surface}). The threshold for the maximum dihedral angle between any two adjacent triangles that result from the edge-collapse is set to $\ang{40}$. The quality criterion used for edge collapse is again maximization of the minimum angle in the triangles thus produced. The best edge for collapse is chosen when decimating the interior vertices using this quality criterion. This is in contrast to the vertex decimation on the advancing front where the candidate edge for collapse is already identified. An illustrative example for surface interior vertex decimation can be seen in Figure \ref{interior-vert-collapse}.
+Here $d$ is the distance between the point on the advancing front and the interior point, $l_1$ and $l_2$ are the lengths of adjacent edges of the point on the front, c is a constant whose value is set as $2$ and $extrudeLength$ is the extrusion length at the vertex on the front. This condition ensures decimation of vertices in surface interior which are close to the advancing front and avoids any encroachment of surface interior vertices on the advancing layers. Topological and geometrical checks are done before an edge can be collapsed. These include a threshold for the ratio of area of generated triangles and a limit on the dihedral angle between the adjacent triangles created by the collapse. The area threshold is set to be $10^8$. Also, edge-collapse is successful only if the triangles resulting from it are be within a limit of $\theta < \ang{30}$ from the surface(see Figure \ref{deviation-surface}). The threshold for the maximum dihedral angle between any two adjacent triangles that result from the edge-collapse is set to $\ang{40}$. The quality criterion used for edge collapse is again maximization of the minimum angle in the triangles thus produced. The best edge for collapse is chosen when decimating the interior vertices using this quality criterion. This is in contrast to the vertex decimation on the advancing front where the candidate edge for collapse is already identified. An illustrative example for surface interior vertex decimation can be seen in Figure \ref{interior-vert-collapse}.
 
 \begin{figure}[hbt!]
 \centering
@@ -295,7 +295,38 @@ After these encroached points and their corresponding encroached edges are ident
 
 \subsection{Combining Triangular Elements to Quads}
 
-Generating advancing layers over the surface proceeds by creating triangular elements. which could be easily converted into quadrilateral elements.
+Generating advancing layers over the surface proceeds by inserting points in the initial triangulation. After generating a layer of the mesh, we can combine the triangular cells into quadrilateral cells by removing the edges from the mesh. Edges are removed from the finished layers so as to generate superior quality quadrilateral cells. As the layers advance from the boundary towards the tangential direction onto the surface, the quadrilateral elements generated retain the boundary topology several layers into the interior of the surface. The quality of a quadrilateral element is calculated as the inverse of the maximum deviation of its interior angle from 90 degrees. This criterion is selected so as to prefer rectangular elements and retain the boundary representation on the surface mesh. Multiple iterations of this subroutine is run for the same layer during mesh generation to ensure as few triangular elements are generated per layer as possible.
+
+%TODO: add a figure demonstrating the combine tri to quad subroutine
+
+\subsection{Smoothing}
+
+Applying a smoothing methodology to a boundary layer mesh is problematic. On the one hand, smoothing improves the mesh element quality, while on the other hand it can diffuse the boundary topology in the mesh. Hence, Laplacian smoothing will not serve the purpose. Optimization based approaches are also employed to smooth the mesh by moving the mesh so as to maximize a quality metric\cite{canann1998approach}. However, even in such approaches, the boundary layers of the mesh are kept fixed and the interior of the mesh is smoothed. This approach is also computationally intensive. The smoothing methodology that we use for the advancing layer mesh is physically-based smoothing. The mesh nodes exert forces on each other and hence, each mesh node is moved so as to balance out all the forces. This procedure of smoothing is also called as spring based smoothing as the edges of the mesh act as springs which pull or push the mesh nodes away or towards each other.
+
+Several spring forces are applied to a given mesh node in the smoothing procedure. Each spring constant is denoted by $k_{spring}$. The forces are -
+
+\begin{itemize}
+\item \textbf{Parent force} - force which keeps the distance of the vertex to its parent (from which it was extruded) closer to the initial extrusion length($l_{ideal}$) between the two.
+\begin{equation}
+f_{parent} = k_{extrusion} * \frac{l_{real} - l_{ideal}}{l_{real} + l_{ideal}} * (parentLocation - vertLocation)
+\end{equation}
+\item \textbf{Kid force} - similar to the parent force, this one keeps the distance between the node and its kid closer to the initial extrusion length.
+\begin{equation}
+f_{kid} = k_{extrusion} * \frac{l_{real} - l_{ideal}}{l_{real} + l_{ideal}} * (kidLocation - vertLocation)
+\end{equation}
+\item \textbf{Neighbour force} - force to maintain uniform spacing of mesh nodes for each layer.
+\begin{equation}
+f_{neighbour} = k_{neighbour} * \frac{(vertLocation - leftVertLocation) + (vertLocation - rightVertLocation)}{ 2.0};
+\end{equation}
+\item \textbf{Original location} - a force is added to restrict the movement of the vertex from the location at which it was placed in the mesh before smoothing
+\begin{equation}
+f_{original} = k_{original} * (origialLocation - currentLocation)
+\end{equation}
+\end{itemize}
+
+These forces are summed up to give the mesh node a resultant force and the node is moved according to the total force. Several iterations (around 5-10) of smoothing are done per layer as the mesh advances towards surface interior.
+
+%TODO: Mesh smoothing add a figure
 
 \section{Overall Mesh Generation Algorithm}
 

@@ -17,6 +17,7 @@
 \setlength\LTleft{0pt} 
 
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\taninv}{tan\,inverse}
 
 \title{Advancing Layer Surface Mesh Generation}
 
@@ -292,12 +293,12 @@ Let us consider a concave corner vertex $P$ in the mesh located at an advancing 
 
 For good quad cells in the surface mesh, i.e. quad cells with angles as close to right angles as possible, we need the point $P$ to `race' a bit initially towards the interior to catch up with its adjacent points. This would be helpful in avoiding mesh collisions. Hence, we formulate a method to find the scaling factor for the extrusion length.
 
-The line $PC$ is constructed at equal angles from edge $PR$ and $PQ$. Let us place the point $X$ extruded from point $P$ on the line $PC$. In an orthogonal structured mesh scenario, if the angle between $PR$ and $PQ$ was 180 degrees, the extrude direction should have been along the edge $PA$ and the extruded point would be at a distance $h$ from the point $P$, which coincides with point $A$ in the figure. The quad thus formed would have been $PABQ$. However, this is not the case. We have a skewed interior angle between $PQ$ and $PR$. If we place the extruded point at a distance $h$ from $P$ along $PC$, the mesh is going to fold onto itself in the next few layers. To avoid this, we take an alternative approach. We place the point $X$ further away from distance $h$. This distance is calculated using the following strategy.
+The line $\mathit{PC}$ is constructed at equal angles from edge $\mathit{PR}$ and $\mathit{PQ}$. Let us place the point $\mathit{X}$ extruded from point $P$ on the line $\mathit{PC}$. In an orthogonal structured mesh scenario, if the angle between $\mathit{PR}$ and $\mathit{PQ}$ was 180 degrees, the extrude direction should have been along the edge $\mathit{PA}$ and the extruded point would be at a distance $\mathit{h}$ from the point $\mathit{P}$, which coincides with point $\mathit{A}$ in the figure. The quad thus formed would have been $\mathit{PABQ}$. However, this is not the case. We have a skewed interior angle between $\mathit{PQ}$ and $\mathit{PR}$. If we place the extruded point at a distance $\mathit{h}$ from $\mathit{P}$ along $\mathit{PC}$, the mesh is going to fold onto itself in the next few layers. To avoid this, we take an alternative approach. We place the point $\mathit{X}$ further away from distance $\mathit{h}$. This distance is calculated using the following strategy.
 
-The area of the quad $PABQ$ would have been $h\times l$ in the orthogonal mesh case. Our strategy is to put the point $X$ on the line $PC$ such that the area of quad $PXBQ$ is also $h\times l$.
+The area of the quad $\mathit{PABQ}$ would have been $h\times l$ in the orthogonal mesh case. Our strategy is to put the point $\mathit{X}$ on the line $\mathit{PC}$ such that the area of quad $\mathit{PXBQ}$ is also $\mathit{h\times l}$.
 %This will lead to the distance $PX$ being more than $h$.
 
-Let us assume that the line $PC$ intersects $AB$ at point $T$. The area of the quad $PTBQ$ is common to both quads $PABQ$ and $PXBQ$. Hence, to make the area of the quads $PABQ$ and $PXBQ$ the same, we just have to equate the area of $\bigtriangleup APT$ and $\bigtriangleup XTB$.
+Let us assume that the line $\mathit{PC}$ intersects $\mathit{AB}$ at point $\mathit{T}$. The area of the quad $\mathit{PTBQ}$ is common to both quads $\mathit{PABQ}$ and $\mathit{PXBQ}$. Hence, to make the area of the quads $\mathit{PABQ}$ and $\mathit{PXBQ}$ the same, we just have to equate the area of $\mathit{\bigtriangleup APT}$ and $\mathit{\bigtriangleup XTB}$.
 %\begin{equation}
 %    Area(PABQ) = Area(PXBQ)
 %    \label{eqn:area-constraint}
@@ -306,18 +307,18 @@ Let us assume that the line $PC$ intersects $AB$ at point $T$. The area of the q
 %    Area(PABQ) = hl
 %\end{equation}
 \begin{equation}
-    Area(\bigtriangleup ATP) = Area(\bigtriangleup TXB)
+    Area(\mathit{\bigtriangleup ATP}) = Area(\mathit{\bigtriangleup TXB})
     \label{eqn:area-constraint}
 \end{equation}
 
-Using this equation, we can find the length $PX$. Let us assume that line segment $PT$ is of length $s_1$ and $PX$ is of length $s_2$. Hence, $PX = s_1 + s_2$. $s_1$ can be easily computed as $h/tan \, \theta$. To find $s_2$, we use the area constraint from equation \ref{eqn:area-constraint}. Area of triangles $\bigtriangleup ATP$ and $\bigtriangleup TXB$ can be easily computed in terms of variables $h$, $l$ and $\theta$.
+Using this equation, we can find the length $\mathit{PX}$. Let us assume that line segment $\mathit{PT}$ is of length $s_1$ and $\mathit{TX}$ is of length $s_2$. Hence, $\mathit{PX = s_1 + s_2}$. $s_1$ can be easily computed as $h/sin \, \theta$. To find $s_2$, we use the area constraint from equation \ref{eqn:area-constraint}. Area of triangles $\mathit{\bigtriangleup ATP}$ and $\mathit{\bigtriangleup TXB}$ can be easily computed in terms of variables $h$, $l$ and $\theta$.
 \begin{equation}
-    Area(\bigtriangleup ATP) = \dfrac{1}{2} h \dfrac{h}{tan \, \theta}
+    Area(\mathit{\bigtriangleup ATP}) = \dfrac{1}{2} h \dfrac{h}{tan \, \theta}
     \label{eqn-area1}
 \end{equation}
 
 \begin{equation}
-    Area(\bigtriangleup TXB) = \dfrac{1}{2} s_2 \left(l - \dfrac{h}{tan \, \theta}\right) sin \, \theta
+    Area(\mathit{\bigtriangleup TXB}) = \dfrac{1}{2} s_2 \left(l - \dfrac{h}{tan \, \theta}\right) sin \, \theta
     \label{eqn-area2}    
 \end{equation}
 
@@ -327,7 +328,7 @@ Solving for $s_2$ using equations \ref{eqn:area-constraint}, \ref{eqn-area1} and
      & \dfrac{1}{2} \dfrac{h^2}{tan \, \theta}  & = & \dfrac{1}{2} s_2 \left(l - \dfrac{h}{tan \, \theta} \right) sin \, \theta  \\
     %\implies & \dfrac{h^2}{tan \, \theta}& =  & s_2 \left( l - \dfrac{h}{tan \, \theta} \right) sin \theta \\
     %\implies & s_2& = & \dfrac{h^2}{sin \, \theta \left( l \: tan \, \theta - h \right)} \\
-    \implies & s_2& = & \dfrac{h}{sin \, \theta} \: \dfrac{1}{ (l/h)\, (tan \, \theta - 1)}
+    \implies & s_2& = & \dfrac{h}{sin \, \theta} . \: \dfrac{1}{ (l/h)\, tan \, \theta - 1}
 \end{array}
 \end{equation}
 
@@ -337,7 +338,7 @@ Finally $PX$ is computed as
 \begin{array}{llcl}
      & PX & = & s_1 + s_2 \\
      %& & = & \dfrac{h}{sin \, \theta} +  h \: \left(\dfrac{h}{l}\right) \: \dfrac{1}{sin \, \theta} \: \dfrac{1}{tan \, \theta - \left( \dfrac{h}{l}\right)} \\
-    & & = & \dfrac{h}{sin \, \theta} \: . \: \dfrac{1}{ (l/h)\, (tan \, \theta - 1)}\\
+    & & = & \dfrac{h}{sin \, \theta} \: . \: \dfrac{1}{ (l/h)\, tan \, \theta - 1}\\
 \end{array}
 \end{equation}
 
@@ -437,9 +438,26 @@ These forces are summed up to give the mesh node a resultant force and the node 
 
 
 \subsection{Front Collision and Redefinition}
-In our advancing layer mesh generation subroutine, we use extrusion length scaling, edge collapse on the front to maintain unit aspect ratio and vertex smoothing. These procedures help to avoid front collisions in a lot of cases and at least postpone the front collisions to further layers. However, front collisions are inevitable while marching layers on a bounded surface. Hence, a subroutine to prevent front collision and redefine the front if collision is inevitable, is required. We deploy two separate methods to deal with collisions.
+In our advancing layer mesh generation subroutine, we use extrusion length scaling, edge collapse on the front and vertex smoothing to maintain sufficiently good mesh quality and sustain boundary topology. These procedures help to avoid front collisions in a lot of cases and at least postpone the front collisions to further layers. However, front collisions are inevitable while marching layers on a bounded surface. Hence, a subroutine to prevent front collision and redefine the front is required. We deploy two separate methods to deal with collisions.
 
-Till now we have described how points advance in layers and how are the layers recovered after each advancing layer step. However, some points on the advancing layer might encroach another edge on the advancing front. In other words, a point in the advancing front might come too close to other points(or edges) on the front which might result in encroachment if we advance all the points in the current layer to the next one. To tackle this issue, we preemptively identify such points and redefine the front so as to avoid encroachments. The redefinition process results in termination of the marching process for some or all the points on the advancing front.
+For concave corners of the mesh which might collide onto themselves, we preemptively close off the corner before the layers collide. Consider a scenrario as shown in figure. Point $A$ is a corner vertex at the mesh front $CAB$. The extrusion length at the front is $h$. The length of the edge $AB$ is $l$. If point $B$ is extruded with the current front definition, the extruded point $D$ would cross the angle bisector of $\angle BAC$, $AX$ and will invalidate the front. This is likely to occur for smaller aspect ratio $AR$  values and small values of included angle $2 \, \theta$. To avoid collision in the next front, we insert a new point $F$ into the mesh, located at the surface projection of the mid-point of $B$ and $C$. $F$ takes place of $A$ as a front vertex and this procedure is repeated until no point which is extruded from the front crosses the angle bisector of its neighbours. The value of angle $\theta$ where this occurs can be written as $\theta = \tan^{-1}(1/AR)$, where $AR$ is the aspect ratio at the corner vertex. Hence, we identify corner as any vertex on the front which has half interior angle $\theta$ less than a threshold times this limit.
+\begin{equation}
+\theta_{corner} < threshold * \tan^{-1}(1/AR)
+\label{eqn-corner-threshold}
+\end{equation}
+
+The threshold is taken as 1.5 for our mesh generation method to resolve all corners collision instances.
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.4]{cornerCollision/cornerCollision.eps}
+\caption{Handling collision at concave corners to avoid layer overlap. Corner point $A$ is replaced by point $F$ so as to form the new front $CFB$. $F$ is the surface-projected mid-point of points $B$ and $C$. This corner collision handling is done until all the half-interior angles, $\theta$ are within the limit described by equation \ref{eqn-corner-threshold}.}
+\label{fig-cornerCollision}
+\end{figure}
+
+%Till now we have described how points advance in layers and how are the layers recovered after each advancing layer step. However, some points on the advancing layer might encroach another edge on the advancing front. In other words, a point in the advancing front might come too close to other points(or edges) on the front which might result in encroachment if we advance all the points in the current layer to the next one. To tackle this issue, we preemptively identify such points and redefine the front so as to avoid encroachments. The redefinition process results in termination of the marching process for some or all the points on the advancing front.
+
+**Following is the Old Version of Front Collapse - Have to Reword this
 
 To achieve the goal of front redefinition, we first iterate through all the points in the front to identify the encroached points. These points are the ones whose distance from any edge in the front, except its adjacent edges, is less than $2.4$ times the extrusion length at that point. As our surface mesh is closed, we can utilize vertex connectivity to find out possible vertex-front edge encroachment. Hence, for a given point on the advancing front, only the edges on the front that share a triangle with that point are checked for encroachment. This saves a lot of computational cost while identifying encroached vertices. This is assuming that the input triangulation is fine enough to resolve the complex features of the geometry so that we don't have to iterate through all the edges to find whether a given point is encroached. 
 
@@ -487,11 +505,13 @@ In the previous section, we have detailed the steps in the advancing layer mesh 
 
 We make a few assumptions on the input triangulation for our mesh generation algorithm to successfully create a valid mesh. The first one is that the triangulation of the surface is fine enough to resolve the geometric complexities in the object. If the input triangulation is too coarse, the encroaching interior vertex deletion subroutine will create mesh elements that deviate significantly from the surface or even fail. Hence, for highly curved regions of the surface, the input triangulation should be within 30 degrees deviation of the surface. However, this issue can be tackled by refining the triangulation using any isotropic refinement algorithm as long as it retains the features of the input object. Coarse triangulations are acceptable for objects without any geometric complexities.
 
-Another assumption we have made for the input triangulation is that it would have well defined boundaries where the advancing layers can march out from. For future, we intend to incorporate a subroutine that identifies these boundaries even on objects which don't have well defined features, for eg. leading edge of an airfoil. Accepting boundary elements as a user input is also an option for such objects.
+Another assumption we have made for the input triangulation is that it would have well defined boundaries where the advancing layers can march out from. In other words, the boundary discretization of the object to be meshed should be supplied as an input to advancing the surface mesh generator. Accepting boundary elements as a user input is also an option for such objects.
 
 \section{Examples}
 
-We use the surface mesh generation algorithm described here to mesh some geometries. We illustrate how the advancing layer algorithm works by creating several advancing fronts from the boundary of input triangulation. Figure \ref{cyl-coarse} shows a cylindrical object with a coarse boundary and surface discretization. The object contains three sub-surfaces. These include the planar end caps of the cylinder and the curved cylindrical surface. The three sub-surfaces of the input triangulation are segmented and meshed  independently using the advancing front surface generation routine. Resultant mesh is shown in Figure \ref{cyl-coarse-mesh}. It can be seen that the boundary curves, that is the circular bounding curve of the sub-surfaces is preserved very well for several layers in the surface interior. Hence, the advancing layer surface mesh generation algorithm helps to preserve the boundary curve even for coarse initial surface discretization. Figure \ref{cyl-coarse-cap} and \ref{cyl-coarse-cap-mesh} show the initial triangulation and the final mesh for the end cap of the cylinder. 
+We use the surface mesh generation algorithm described here to mesh some geometries. We illustrate how the advancing layer algorithm works by creating several advancing fronts from the boundary of input triangulation. Figure \ref{advancing-layer-routine}
+
+Figure \ref{cyl-coarse} shows a cylindrical object with a coarse boundary and surface discretization. The object contains three sub-surfaces. These include the planar end caps of the cylinder and the curved cylindrical surface. The three sub-surfaces of the input triangulation are segmented and meshed  independently using the advancing front surface generation routine. Resultant mesh is shown in Figure \ref{cyl-coarse-mesh}. It can be seen that the boundary curves, that is the circular bounding curve of the sub-surfaces is preserved very well for several layers in the surface interior. Hence, the advancing layer surface mesh generation algorithm helps to preserve the boundary curve even for coarse initial surface discretization. Figure \ref{cyl-coarse-cap} and \ref{cyl-coarse-cap-mesh} show the initial triangulation and the final mesh for the end cap of the cylinder. 
 
 Another example is shown in Figure \ref{cylinder-fine}. Here, the same cylindrical geometry is taken as the input but with a finer boundary and surface discretization as shown in Figure \ref{cyl-fine}. The surface mesh generated for this geometry is shown in Figure \ref{cyl-fine-mesh}. Here again, the advancing layers grow anisotropically from the boundary into the interior of the mesh and generate 16 layers on all the three sub-surfaces. The parameters used for both the meshes described for the cylindrical geometry are shown in Table \ref{cyl-table}. The value of aspect ratio at the surface boundary is set to $\approx 5-6$ to generate the anisotropic meshes. This value can be modified by changing the initial extrusion length and the growth ratio, which are the inputs to the algorithm. The number of layers generated on all three segmented surfaces of the coarse cylindrical geometry are 9 and for the fine cylindrical geometry are 16.
 

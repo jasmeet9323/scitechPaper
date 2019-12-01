@@ -132,29 +132,27 @@ After advancing one layer to the surface interior, we increase the extrude lengt
 
 A mesh observer object is initialized for the mesh data structure. The observer monitors all the changes happening to the mesh. These include creation and deletion of vertices, edges and cells in the mesh. An edge swapping manager and quality criterion for deciding a swap are also initialized for the mesh. The primary quality criterion we chose for an edge swap is maximization of the minimum angle in the pair of triangles adjacent to the edge before and after the swap. However, only this criterion is not enough for improving surface mesh quality. This is because a better quality pair of triangles may result by edge swapping according to this criterion, however, they might deviate quite a bit from the underlying surface. Hence, we threshold the maximum deviation of the resultant triangles from the surface. This deviation is calculated as the angle between the normal to the triangle and the normal at the centriod of the triangle projected onto the surface. See Figure \ref{deviation-surface} for reference. Deviation of a triangle $T$ with respect to a surface $S$ is shown. $P$ is the centroid of the triangle and $P_s$ is the projection of the centroid onto the surface. $PN$ is the normal to the triangle and $P_sN_s$ is the normal to the surface at $P_s$. The interior angle $\theta$ is considered as the deviation of the triangle from the surface. A upper bound is set for $\theta$ to limit the deviation of resultant triangles from the surface.  The bound is set to $\ang{30}$ for the surfaces meshes we are dealing with. This bound is sensitive to the refinement in the initial triangulation. A higher value of $\theta$ would be appropriate for a coarse initial triangulation while the value can be set low for a fine initial triangulation.
 
-We queue up the edges of the triangles affected by the insertion of the new point and do edge swapping for these edges to improve on the existing mesh. Figure \ref{point-insert} shows the process of point insertion and local reconnection in two steps. First, a point is inserted into the mesh at the desired location. This results in subdivision of a triangle as can be seen in figure \ref{point-insert2}. Subsequently, edge swaps occur to improve the mesh quality. Two iterations of edge swap can be seen in figure \ref{point-insert3} and \ref{point-insert4}. We do not swap the edges which comprise the front or the edge between parent and child points. Doing so would invalidate the advancing front. Hence, only interior faces of the surface or the diagonals of the quad elements generated are swapped by the face swapping algorithm. After edge swapping, the algorithm moves on to the next point in the current layer to repeat the same process.
-
-\begin{figure}[hbt!]
+\begin{figure}[!hbt]
 \centering
-\begin{subfigure}{.5\textwidth}
+\begin{subfigure}{.4\textwidth}
   \centering
   \includegraphics[width=.8\linewidth]{point-insertion-swapping/initial.eps}
   \caption{}
   \label{point-insert1}
 \end{subfigure}%
-\begin{subfigure}{.5\textwidth}
+\begin{subfigure}{.4\textwidth}
   \centering
   \includegraphics[width=.8\linewidth]{point-insertion-swapping/point-inserted.eps}
   \caption{}
   \label{point-insert2}
 \end{subfigure}
-\begin{subfigure}{.5\textwidth}
+\begin{subfigure}{.4\textwidth}
   \centering
   \includegraphics[width=.8\linewidth]{point-insertion-swapping/swap1.eps}
   \caption{}
   \label{point-insert3}
 \end{subfigure}%
-\begin{subfigure}{.5\textwidth}
+\begin{subfigure}{.4\textwidth}
   \centering
   \includegraphics[width=.8\linewidth]{point-insertion-swapping/swap2.eps}
   \caption{}
@@ -164,37 +162,39 @@ We queue up the edges of the triangles affected by the insertion of the new poin
 \label{point-insert}
 \end{figure}
 
+We queue up the edges of the triangles affected by the insertion of the new point and do edge swapping for these edges to improve on the existing mesh. Figure \ref{point-insert} shows the process of point insertion and local reconnection in two steps. First, a point is inserted into the mesh at the desired location. This results in subdivision of a triangle as can be seen in figure \ref{point-insert2}. Subsequently, edge swaps occur to improve the mesh quality. Two iterations of edge swap can be seen in figure \ref{point-insert3} and \ref{point-insert4}. We do not swap the edges which comprise the front or the edge between parent and child points. Doing so would invalidate the advancing front. Hence, only interior faces of the surface or the diagonals of the quad elements generated are swapped by the face swapping algorithm. After edge swapping, the algorithm moves on to the next point in the current layer to repeat the same process.
+
 \subsection{Front Recovery}
 
 In an advancing layer mesh generation algorithm, the accurate representation of the boundary by anisotropic layers generated from it is very important. Also, generation of quad-elements from triangles with the right aspect ratios is far easier if we retain the boundary representation as we advance multiple layers. Hence, after all points of the parent layer are extruded, we implement a front recovery routine which recovers all edges between kid vertices.
 
 \begin{figure}[hbt!]
 \centering
-\begin{subfigure}{0.5\textwidth}
+\begin{subfigure}{0.4\textwidth}
   \centering
   \includegraphics[width=.9\linewidth]{force-swapping-edge-recovery/initial-edited.eps}
   \caption{}
   \label{force-swap1}
 \end{subfigure}%
-\begin{subfigure}{.5\textwidth}
+\begin{subfigure}{.4\textwidth}
   \centering
   \includegraphics[width=.9\linewidth]{force-swapping-edge-recovery/swap1-edited.eps}
   \caption{}
   \label{force-swap2}
 \end{subfigure}
-\begin{subfigure}{.5\textwidth}
+\begin{subfigure}{.4\textwidth}
   \centering
   \includegraphics[width=.9\linewidth]{force-swapping-edge-recovery/swap2-edited.eps}
   \caption{}
   \label{force-swap3}
 \end{subfigure}%
-\begin{subfigure}{.5\textwidth}
+\begin{subfigure}{.4\textwidth}
   \centering
   \includegraphics[width=.9\linewidth]{force-swapping-edge-recovery/swap3-edited.eps}
   \caption{}
   \label{force-swap4}
 \end{subfigure}
-\begin{subfigure}{.5\textwidth}
+\begin{subfigure}{.4\textwidth}
   \centering
   \includegraphics[width=.9\linewidth]{force-swapping-edge-recovery/swap4-edited.eps}
   \caption{}
@@ -251,27 +251,27 @@ After we have a recovered the front and decimated encroaching vertices in the su
 
 \begin{figure}[hbt!]
 \centering
-\begin{subfigure}{.5\textwidth}
+\begin{subfigure}{.4\textwidth}
   \centering
-  \includegraphics[width=.9\linewidth]{interior-vert-collapse/cc1.eps}
+  \includegraphics[width=.9\linewidth, trim={0 5cm 0  0}, clip]{interior-vert-collapse/cc1.eps}
   \caption{}
   \label{cc1}
 \end{subfigure}%
-\begin{subfigure}{.5\textwidth}
+\begin{subfigure}{.4\textwidth}
   \centering
-  \includegraphics[width=.9\linewidth]{interior-vert-collapse/cc2.eps}
+  \includegraphics[width=.9\linewidth, trim={0 5cm 0  0}, clip]{interior-vert-collapse/cc2.eps}
   \caption{}
   \label{cc2}
 \end{subfigure}
-\begin{subfigure}{.5\textwidth}
+\begin{subfigure}{.4\textwidth}
   \centering
-  \includegraphics[width=.9\linewidth]{interior-vert-collapse/cc3.eps}
+  \includegraphics[width=.9\linewidth, trim={0 5cm 0  0}, clip]{interior-vert-collapse/cc3.eps}
   \caption{}
   \label{cc3}
 \end{subfigure}%
-\begin{subfigure}{.5\textwidth}
+\begin{subfigure}{.4\textwidth}
   \centering
-  \includegraphics[width=.9\linewidth]{interior-vert-collapse/cc4.eps}
+  \includegraphics[width=.9\linewidth, trim={0 5cm 0  0}, clip]{interior-vert-collapse/cc4.eps}
   \caption{}
   \label{cc4}
 \end{subfigure}
@@ -279,11 +279,11 @@ After we have a recovered the front and decimated encroaching vertices in the su
 \label{interior-vert-collapse}
 \end{figure}
 
-\subsection{Extrusion length scaling at concave corners}
+\subsection{Extrusion Length Scaling At Concave Corners}
 \label{section-extrusionScaling}
-The advancing layer surface mesh takes a fixed initial extrusion length and grows the layers from it using the user supplied growth ratio. However, having a fixed initial extrusion length for all the vertices at the boundary would lead to collisions at concave corners of the mesh. Hence, we scale the extrusion length at the vertices of the advancing layer to take into account the concavity of the layer at that particular vertex.
+The advancing layer surface mesh takes a fixed initial extrusion length and grows the layers from it using a user supplied growth ratio. However, having a fixed initial extrusion length for all the vertices at the boundary would lead to collisions at concave corners of the mesh. Hence, we scale the extrusion length at the vertices of the advancing layer to take into account the concavity of the layer at that particular vertex.
 
-Let us consider a concave corner vertex $P$ in the mesh located at an advancing layer. The adjacent edges to $P$ on the layer are $PR$ and $PQ$. The included angle between these two edges is denoted as $2\theta$. Let's assume that the length of the edge $PQ$ is $l$(see Figure \ref{fig:basic-diagram-extrusion-factor}) and the extrusion length for the layer at which vertex $P$ is located as $h$. We need to find a reasonable extrusion direction and extrusion length for the corner point P.
+Let us consider a concave corner vertex $P$ in the mesh located at an advancing layer. The adjacent edges to $P$ on the layer are $PR$ and $PQ$. The included angle between these two edges is denoted as $2\theta$. Let's assume that the length of the edge $PQ$ is $l$ (see Figure \ref{fig:basic-diagram-extrusion-factor}) and the extrusion length for the layer at which vertex $P$ is located as $h$. We need to find a reasonable extrusion direction and extrusion length for the corner point P.
 
 \begin{figure}[hbt!]
     \centering
@@ -294,7 +294,7 @@ Let us consider a concave corner vertex $P$ in the mesh located at an advancing 
 
 For good quad cells in the surface mesh, i.e. quad cells with angles as close to right angles as possible, we need the point $P$ to `race' a bit initially towards the interior to catch up with its adjacent points. This would be helpful in avoiding mesh collisions. Hence, we formulate a method to find the scaling factor for the extrusion length.
 
-The line $\mathit{PC}$ is constructed at equal angles from edge $\mathit{PR}$ and $\mathit{PQ}$. Let us place the point $\mathit{X}$ extruded from point $P$ on the line $\mathit{PC}$. In an orthogonal structured mesh scenario, if the angle between $\mathit{PR}$ and $\mathit{PQ}$ was 180 degrees, the extrude direction should have been along the edge $\mathit{PA}$ and the extruded point would be at a distance $\mathit{h}$ from the point $\mathit{P}$, which coincides with point $\mathit{A}$ in the figure. The quad thus formed would have been $\mathit{PABQ}$. However, this is not the case. We have a skewed interior angle between $\mathit{PQ}$ and $\mathit{PR}$. If we place the extruded point at a distance $\mathit{h}$ from $\mathit{P}$ along $\mathit{PC}$, the mesh is going to fold onto itself in the next few layers. To avoid this, we take an alternative approach. We place the point $\mathit{X}$ further away from distance $\mathit{h}$. This distance is calculated using the following strategy.
+The line $\mathit{PC}$ is constructed at equal angles from edge $\mathit{PR}$ and $\mathit{PQ}$. Let us place the point $\mathit{X}$ extruded from point $P$ on the line $\mathit{PC}$. In an orthogonal structured mesh scenario, if the angle between $\mathit{PR}$ and $\mathit{PQ}$ was 180 degrees, the extrusion direction should have been along the edge $\mathit{PA}$ and the extruded point would be at a distance $\mathit{h}$ from the point $\mathit{P}$, which coincides with point $\mathit{A}$ in the figure. The quad thus formed would have been $\mathit{PABQ}$. However, this is not the case. We have a skewed interior angle between $\mathit{PQ}$ and $\mathit{PR}$. If we place the extruded point at a distance $\mathit{h}$ from $\mathit{P}$ along $\mathit{PC}$, the mesh is going to fold onto itself in the next few layers. To avoid this, we take an alternative approach. We place the point $\mathit{X}$ further away from distance $\mathit{h}$. This distance is calculated using the following strategy.
 
 The area of the quad $\mathit{PABQ}$ would have been $h\times l$ in the orthogonal mesh case. Our strategy is to put the point $\mathit{X}$ on the line $\mathit{PC}$ such that the area of quad $\mathit{PXBQ}$ is also $\mathit{h\times l}$.
 %This will lead to the distance $PX$ being more than $h$.
@@ -314,7 +314,7 @@ Let us assume that the line $\mathit{PC}$ intersects $\mathit{AB}$ at point $\ma
 
 Using this equation, we can find the length $\mathit{PX}$. Let us assume that line segment $\mathit{PT}$ is of length $s_1$ and $\mathit{TX}$ is of length $s_2$. Hence, $\mathit{PX = s_1 + s_2}$. $s_1$ can be easily computed as $h/\sin \, \theta$. To find $s_2$, we use the area constraint from equation \ref{eqn:area-constraint}. Area of triangles $\mathit{\bigtriangleup ATP}$ and $\mathit{\bigtriangleup TXB}$ can be easily computed in terms of variables $h$, $l$ and $\theta$.
 \begin{equation}
-    Area(\mathit{\bigtriangleup ATP}) = \dfrac{1}{2} h \dfrac{h}{\tan \, \theta}
+    Area(\mathit{\bigtriangleup ATP}) = \dfrac{1}{2} \, . \,  h \, .  \, \dfrac{h}{\tan \, \theta}
     \label{eqn-area1}
 \end{equation}
 
@@ -334,12 +334,12 @@ Solving for $s_2$ using equations \ref{eqn:area-constraint}, \ref{eqn-area1} and
 \end{equation}
 
 
-Finally $mathit{PX}$ is computed as
+Finally $\mathit{PX}$ is computed as
 \begin{equation}
 \begin{array}{llcl}
      &  \mathit{PX} & = & s_1 + s_2 \\
      %& & = & \dfrac{h}{\sin \, \theta} +  h \: \left(\dfrac{h}{l}\right) \: \dfrac{1}{\sin \, \theta} \: \dfrac{1}{\tan \, \theta - \left( \dfrac{h}{l}\right)} \\
-    & & = & \dfrac{h}{\sin \, \theta} \: . \: \dfrac{1}{ (l/h)\, \tan \, \theta - 1}\\
+    & & = & \dfrac{h}{\sin \, \theta} \:  \left( 1 +  \: \dfrac{1}{ (l/h)\, \tan \, \theta - 1} \right)\\
 \end{array}
 \end{equation}
 
@@ -358,19 +358,19 @@ And the extrusion factor $f$ is simply $PX/h$
     f = \dfrac{1}{2 \, \sin \, \theta} \left[ 2 + \dfrac{1}{A_1\, \tan \, \theta - 1} + \dfrac{1}{A_2\, \tan \, \theta - 1} \right]
 \end{equation}
 
-Hence, the extrusion factor $f$ depends on the half included angle $\theta$ and the aspect ratios $A_1 \text{ and } A_2$ at the vertex. We use a couple of constraints while using this extrusion factor. First, we ensure that $A > cot \theta$ so that we never get negative values for $f$. Secondly, we limit the extrusion length at any vertex to be less than the minimum of the length of adjacent edges on the boundary. This is done because the extrusion factor can be  really large for small angles and small aspect ratios. Hence, to avoid highly stretched cells in the mesh, we limit the value of extrusion length at any vertex such that the resultant aspect ratio at that vertex would always be more than 1. Figure \ref{fig-extrusionScaling} shows an example of scaling the extrusion length at the concave corner. Along with preventing layers to fold onto themselves, this technique also helps in improving the quality of quad cells generated in the mesh.
+Hence, the extrusion factor $f$ depends on the half included angle $\theta$ and the aspect ratios $A_1 \text{ and } A_2$ at the vertex. We use a couple of constraints while using this extrusion factor. First, we ensure that $A > cot \theta$, so that we never get negative values for $f$. Secondly, we limit the extrusion length at any vertex to be less than the minimum of the length of adjacent edges on the boundary. This is done because the extrusion factor can be  really large for small angles and small aspect ratios. Hence, to avoid generating skinny elements at concave corners of the mesh, we limit the extrusion length at any vertex such that the resultant aspect ratio at that vertex would always be more than 1. Figure \ref{fig-extrusionScaling} shows an example of scaling the extrusion length at the concave corner. Along with preventing layers to fold onto themselves, this technique also helps in improving the quality of quad cells generated in the mesh.
 
 %One important assumption in this derivation is that $A_1$ and $A_2$ should be less than $tan\, \theta$. If this is not the case, we might get negative values for $f$.
 
 \begin{figure}
 \centering
-\begin{subfigure}{0.5\textwidth}
+\begin{subfigure}{0.4\textwidth}
 \includegraphics[width = 0.9\linewidth]{extrusionScaling/withoutScaling.eps}
 \caption{}
 \label{subfigure-extrusionScaling1}
 \centering
 \end{subfigure}%
-\begin{subfigure}{0.5\textwidth}
+\begin{subfigure}{0.4\textwidth}
 \centering
 \includegraphics[width = 0.9\linewidth]{extrusionScaling/withScaling.eps}
 \caption{}
@@ -387,17 +387,17 @@ Generating advancing layers over the surface proceeds by inserting points in the
 
 \begin{figure}
 \centering
-\begin{subfigure}{0.5\textwidth}
+\begin{subfigure}{0.4\textwidth}
 \includegraphics[width=0.9\linewidth]{combine-tris-to-quads/combineTrisToQuads1.eps}
 \caption{}
 \label{fig-triQuad1}
 \end{subfigure}%
-\begin{subfigure}{0.5\textwidth}
+\begin{subfigure}{0.4\textwidth}
 \includegraphics[width =0.9\linewidth]{combine-tris-to-quads/combineTrisToQuads2.eps}
 \caption{}
 \label{fig-triQuad2}
 \end{subfigure}
-\caption{Combining triangular cells to quadrilateral cells based on the quality of the quadrilateral cells generated.}
+\caption{Combining triangular cells to quadrilateral cells based on the quality of the quadrilateral cells generated. For any given quadrilateral element, the inverse of the maximum deviation of its interior angles from 90$^\circ$ is adopted as the measure of quality.}
 \label{fig-triQuad}
 \end{figure}
 %TODO: add a figure demonstrating the combine tri to quad subroutine
@@ -427,11 +427,11 @@ Several spring forces are applied to a given mesh node in the smoothing procedur
 \end{equation}
 \end{itemize}
 
-These forces are summed up to give the mesh node a resultant force and the node is moved according to the total force. Several iterations (around 5-10) of smoothing are done per layer as the mesh advances towards surface interior. A limit is set to the vertex movement per smoothing iteration. The distance a vertex moves per iteration of the smoothing algorithm is kept at $5\%$ of the extrusion length at that vertex. This helps in limiting the movement of the vertex when the initial boundary discretization is too coarse.
+These forces are summed up to give the mesh node a resultant force and the node is moved according to the total force. Several iterations (around 5-10) of smoothing are done per layer as the mesh advances towards surface interior. A limit is set to the vertex movement per smoothing iteration. The distance a vertex moves per iteration of the smoothing algorithm is kept at $5\%$ of the extrusion length at that vertex. This helps in limiting the movement of the vertex when the initial boundary discretization is too coarse. The limitation of choosing a spring-based smoothing technique is that we have to carefully identify the spring constants, $\mathit{k_{spring}}$ for our algorithm. However, once these constants are identified, they seem to work reasonably well for all the cases that we run. The value of $\mathit{k_{extrusion}}$ we use is 0.01, $k_{neighbour}$ is kept at 0.02 and $\mathit{k_{original}}$ at 0.1. Figure \ref{fig-smoothing-cylinder} shows an advancing layer surface mesh with and without smoothing applied to the mesh vertices. It can be seen that smoothing helps improve the vertex spacing along the advancing layer, thereby making the aspect ratio more uniform at a given front.
 
 \begin{figure}
 \centering
-\includegraphics[scale=0.3]{smoothing/smoothing-comparison-cylinder-cap.eps}
+\includegraphics[width=0.4\linewidth]{smoothing/smoothing-comparison-cylinder-cap.eps}
 \caption{Zoomed in view of smoothing applied to an advancing layer surface mesh. Dark blue lines represent the smoothed mesh and flat red lines represent the mesh without smoothing. We can see that the smoothed version of the mesh helps to attain uniform aspect ratio at each layer.}
 \label{fig-smoothing-cylinder}
 \end{figure}
@@ -442,7 +442,7 @@ These forces are summed up to give the mesh node a resultant force and the node 
 \label{collisionSection}
 In our advancing layer mesh generation subroutine, we use extrusion length scaling, edge collapse on the front and vertex smoothing to maintain sufficiently good mesh quality and sustain boundary topology. These procedures help to avoid front collisions in many cases and at least postpone the front collisions to further layers. However, front collisions are inevitable while marching layers on a bounded surface. Hence, a subroutine to prevent front collision and redefine the front is required. We deploy two separate methods to deal with collisions.
 
-For concave corners of the mesh which might collide onto themselves, we preemptively close off the corner before the layers collide. Consider a concave corner as shown in figure \ref{front-redef}. Point $A$ is a corner vertex at the mesh front $CAB$. The extrusion length at the front is $h$. The length of the edge $AB$ is $l$. If point $B$ is extruded with the current front definition, the extruded point $D$ would cross the angle bisector of $\angle BAC$, $AX$ and will invalidate the front. This is likely to occur for smaller aspect ratio $AR$  values and small values of included angle $2 \, \theta$. To avoid collision in the next front, we insert a new point $F$ into the mesh, located at the surface projection of the mid-point of $B$ and $C$. $F$ takes the place of $A$ as a front vertex and this procedure is repeated until no point which is extruded from the front crosses the angle bisector of its neighbours. The value of angle $\theta$ where this occurs can be written as $\theta = \tan^{-1}(1/AR)$, where $AR$ is the aspect ratio at the corner vertex. Hence, we identify corner as any vertex on the front which has half interior angle $\theta$ less than a threshold times this limit.
+For concave corners of the mesh which might collide onto themselves, we preemptively close off the corner before the layers collide. Consider a concave corner as shown in figure \ref{fig-cornerCollision}. Point $A$ is a corner vertex at the mesh front $CAB$. The extrusion length at the front is $h$. The length of the edge $AB$ is $l$. If point $B$ is extruded with the current front definition, the extruded point $D$ would cross the angle bisector of $\angle BAC$, $AX$ and will invalidate the front. This is likely to occur for smaller aspect ratio ($AR$)  values and small values of included angle $2 \, \theta$. To avoid collision in the next front, we insert a new point $F$ into the mesh, located at the surface projection of the mid-point of $B$ and $C$. $F$ takes the place of $A$ as a front vertex and this procedure is repeated until no point which is extruded from the front crosses the angle bisector of its neighbours. The value of angle $\theta$ where this occurs can be written as $\theta = \tan^{-1}(1/AR)$, where $AR$ is the aspect ratio at the corner vertex. Hence, we identify corner as any vertex on the front which has half interior angle $\theta$ less than a threshold times this limit.
 \begin{equation}
 \mathit{\theta_{corner} < threshold * \tan^{-1}(1/AR)}
 \label{eqn-corner-threshold}
@@ -459,18 +459,50 @@ The threshold is taken as 1.5 for our mesh generation method to resolve all corn
 
 %Till now we have described how points advance in layers and how are the layers recovered after each advancing layer step. However, some points on the advancing layer might encroach another edge on the advancing front. In other words, a point in the advancing front might come too close to other points(or edges) on the front which might result in encroachment if we advance all the points in the current layer to the next one. To tackle this issue, we preemptively identify such points and redefine the front so as to avoid encroachments. The redefinition process results in termination of the marching process for some or all the points on the advancing front.
 
-**Following is the Old Version of Front Collapse - Have to Reword this
-
-To achieve the goal of front redefinition, we first iterate through all the points in the front to identify the encroached points. These points are the ones whose distance from any edge in the front, except its adjacent edges, is less than $2.4$ times the extrusion length at that point. As our surface mesh is closed, we can utilize vertex connectivity to find out possible vertex-front edge encroachment. Hence, for a given point on the advancing front, only the edges on the front that share a triangle with that point are checked for encroachment. This saves a lot of computational cost while identifying encroached vertices. This is assuming that the input triangulation is fine enough to resolve the complex features of the geometry so that we don't have to iterate through all the edges to find whether a given point is encroached. 
-
-After these encroached points and their corresponding encroached edges are identified, we reconnect the non-encroached points so as to form the new front. The encroached points are moved out of the advancing front and the front is hence redefined. An example of front redefinition can be seen in Figure \ref{front-redef}. Here, the red line denotes the old front. If two of the three corner points are marched on to the next layer, the mesh elements would overlap each other and the front would be invalidated. Hence, two of them are selected to be moved out of the front. The front is redefined to contain the adjacent edges of only the remaining vertices in the front. The green line shows the newly defined front which would be used for the generation of the next layer on the surface.
-
-\begin{figure}[hbt!]
-    \centering
-    \includegraphics[width=.4\textwidth]{front-before-n-after-redefinition.eps}
-    \caption{Zoomed in view of an advancing layer mesh. After advancing a few layers, the mesh reaches the front denoted by red line. If the mesh keeps advancing like this, the front would collapse on itself resulting in undefined behaviour. The front redefinition routine stops two points from marching further and redefines the front as shown in green. The next marched layer is also shown.}
-    \label{front-redef}
+\begin{figure}
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{meshCases/joint-x0.004-g1.04-a5/collapse1.eps}
+  \caption{}
+  \label{fig-collision1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{meshCases/joint-x0.004-g1.04-a5/collapse2.eps}
+  \caption{}
+  \label{fig-collision2}
+\end{subfigure}
+\caption{Handling front collisions. (a) shows the advancing front which is about to collide onto itself. Using the vertex connectivity at the advancing layer and the proximity of the advancing layer vertices from each other, some of the front vertices are removed from the front and the front is redefined. The redefined front extruded to the next layer is shown in (b). From this iteration of the front, it would proceed with only the vertices on the front shown in red.}
+\label{fig-collision}
 \end{figure}
+
+Apart from handling collisions at the corners of the mesh, we also need to take care of the front collisions which happen elsewhere. Consider Figure \ref{fig-collision1} where the advancing layer surface mesh generation algorithm is meshing one of the surfaces of the geometry shown in Figure \ref{surf-segment} . The advancing front is shown in red in the figure. After advancing several layers from the boundary, it reaches a point where it is about to collapse onto itself. Hence, some sort of front redefinition is necessary before moving on to the next layer. To achieve this, we first iterate through all the points in the front to identify the encroached points. These points are the ones whose distance from any edge in the front, except its adjacent edges, is less than a threshold (taken as $2.4$) times the extrusion length at that point. As our surface mesh is closed, we can utilize the vertex connectivity to find out the possible vertex-front edge encroachment. Hence, for a given point on the advancing front, only the edges on the front that share a triangle with that point are checked for encroachment. This saves a lot of computational cost while identifying encroached vertices. We assume that the input boundary discretization and surface triangulation are fine enough to resolve the complex features of the geometry, so that we don't have to iterate through all the edges on the front to find whether a given point is encroached or not.
+
+After these encroached points and their corresponding edges are identified, we reconnect the non-encroached points so as to form the new front. The encroached points are moved out of the advancing front and the front is hence redefined. In figure \ref{fig-collision2}, we show the redefined front extruded to the next layer. In this case, the front is divided into two loops, each of which continues to march independently towards the interior of the surface. After dealing with the concave corner collision cases, this approach helps us tackle front collisions at other regions of the front  and completes the front redefinition process wherever the advancing front might collide onto itself.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.4\linewidth]{cornerCollision/cornerLimitation.eps}
+\caption{Limitation of the concave corner collision detection and front redefinition subroutine. Zoomed in view of the trailing edge of an airfoil is shown. The subroutine successfully closes off the two concave corners present a the tip of the trailing edge, but produces a couple of skinny triangles in the mesh with non-ideal vertex placement.}
+\label{fig-cornerLimitation}
+\end{figure}
+
+The concave corner detection and front redefinition routine associated with it works well to close off the corners. However, the vertex placement at such concave corners is not ideal every time. It tends to produce skinny triangular elements if there are multiple corners adjacent to each other because of bad boundary discretization. Hence, this is a limitation of the current formulation. Figure \ref{fig-cornerLimitation} shows such a case. A zoomed in view of the trailing edge of an airfoil is shown. Two sharp corners at the boundary of the surface are successfully closed by the mesh and the front continues to advance towards the interior of the surface. However, the quality of the triangular elements generated is not ideal. Better vertex placement and a different smoothing subroutine for such vertices could produce better quality mesh elements for such cases.
+
+
+%**Following is the Old Version of Front Collapse - Have to Reword this
+
+%To achieve the goal of front redefinition, we first iterate through all the points in the front to identify the encroached points. These points are the ones whose distance from any edge in the front, except its adjacent edges, is less than $2.4$ times the extrusion length at that point. As our surface mesh is closed, we can utilize vertex connectivity to find out possible vertex-front edge encroachment. Hence, for a given point on the advancing front, only the edges on the front that share a triangle with that point are checked for encroachment. This saves a lot of computational cost while identifying encroached vertices. This is assuming that the input triangulation is fine enough to resolve the complex features of the geometry so that we don't have to iterate through all the edges to find whether a given point is encroached. 
+
+%After these encroached points and their corresponding encroached edges are identified, we reconnect the non-encroached points so as to form the new front. The encroached points are moved out of the advancing front and the front is hence redefined. An example of front redefinition can be seen in Figure \ref{front-redef}. Here, the red line denotes the old front. If two of the three corner points are marched on to the next layer, the mesh elements would overlap each other and the front would be invalidated. Hence, two of them are selected to be moved out of the front. The front is redefined to contain the adjacent edges of only the remaining vertices in the front. The green line shows the newly defined front which would be used for the generation of the next layer on the surface.
+
+%\begin{figure}[hbt!]
+%    \centering
+%    \includegraphics[width=.4\textwidth]{front-before-n-after-redefinition.eps}
+%    \caption{Zoomed in view of an advancing layer mesh. After advancing a few layers, the mesh reaches the front denoted by red line. If the mesh keeps advancing like this, the front would collapse on itself resulting in undefined behaviour. The front redefinition routine stops two points from marching further and redefines the front as shown in green. The next marched layer is also shown.}
+%    \label{front-redef}
+%\end{figure}
 
 
 \subsection{Overall Mesh Generation Algorithm}
@@ -505,15 +537,15 @@ In the previous section, we have detailed the steps in the advancing layer mesh 
 
 \section{Assumptions}
 
-We make a few assumptions on the input triangulation for our mesh generation algorithm to successfully create a valid mesh. The first one is that the triangulation of the surface is fine enough to resolve the geometric complexities in the object. If the input triangulation is too coarse, the encroaching interior vertex deletion subroutine will create mesh elements that deviate significantly from the surface or even fail. Hence, for highly curved regions of the surface, the input triangulation should be within 30 degrees deviation of the surface. However, this issue can be tackled by refining the triangulation using any isotropic refinement algorithm as long as it retains the features of the input object. Coarse triangulations are acceptable for objects without any geometric complexities.
+We make a few assumptions on the input triangulation for our mesh generation algorithm to successfully create a valid mesh. The first one is that the triangulation of the surface is fine enough to resolve the geometric complexities in the object. If the input triangulation is too coarse, the encroaching interior vertex deletion subroutine will create mesh elements that deviate significantly from the surface or even fail. Hence, for highly curved regions of the surface, the input triangulation should be within 30 degrees deviation from the surface. However, this issue can be tackled by refining the triangulation using any isotropic refinement algorithm as long as it retains the features of the input object. Coarse triangulations are acceptable for objects without any geometric complexities.
 
-Another assumption we have made for the input triangulation is that it would have well defined boundaries where the advancing layers can march out from. In other words, the boundary discretization of the object to be meshed should be supplied as an input to advancing the surface mesh generator. Accepting boundary elements as a user input is also an option for such objects.
+Another assumption we have made for the input triangulation is that it would have well defined boundaries where the advancing layers can march out from. Sharp corners in the input geometry are automatically identified as boundaries of the mesh but the boundary discretization of blunt corners needs to be supplied as an input to the advancing layer surface mesh generator.
 
 \section{Examples}
 
-We use the surface mesh generation algorithm described here to mesh some geometries. We illustrate how the advancing layer algorithm works by creating several advancing fronts from the boundary of input triangulation. We take the NACA 0018 airfoil and create a solid model by extruding it. After generating a triangulation from the model, we mesh the airfoil using our advancing layer routine. Figure \ref{fig-naca} shows a mesh of NACA 0018 airfoil. Figure \ref{fig-endCap-low} and \ref{fig-oblique-low} show a mesh with a growth ratio of 1.05. Figure \ref{fig-endCap-high} and \ref{fig-oblique-high} show the same geometry meshed using growth ratio 1.1. The meshes could be seen to have anisotropic refinement at the leading edge, the trailing edge and at the boundary of the end caps of the airfoil. The description of the boundary of the airfoil is carried several layers into the mesh. Most of the elements generated are quads with nearly right angles. A few triangles can be seen wherever the mesh has to conform to the geometry without folding onto itself. 
+We use the surface mesh generation algorithm described here to mesh some geometries. We illustrate how the advancing layer algorithm works by creating several advancing fronts from the boundary of input triangulation. We take the NACA 0018 airfoil and create a solid model by extruding it. After generating a triangulation from the model, we mesh the airfoil using our advancing layer routine. Figure \ref{fig-naca} shows a mesh of NACA 0018 airfoil. Figure \ref{fig-endCap-low} and \ref{fig-oblique-low} show a mesh with a growth ratio of 1.05. Figure \ref{fig-endCap-high} and \ref{fig-oblique-high} show the same geometry meshed using growth ratio 1.1. The meshes can be seen to have anisotropic refinement at the leading edge, the trailing edge and at the boundary of the end caps of the airfoil. The description of the boundary of the airfoil is carried several layers into the mesh. Most of the elements generated are quads with nearly right angles. A few triangles can be seen wherever the mesh has to conform to the geometry without folding onto itself. 
 
-Table \ref{table-naca} shows the mesh parameters of the two cases shown in figure. In the higher growth ratio case, 96.22 percent of the anlges are between 45 and 135 degrees while for the lower growth ratio case, 97.38 percent of the angles are in that range. In figure \ref{fig-angle-distribution}, we plot the distribution of angles for the mesh elements. As can be seen from the distribution, for both the cases, most of the angles are within a 30$^\circ$ range of 90$^\circ$. The distribution is plotted on a log scale to highlight the variation from the mean value. The distribution of angles is more spread out for the higher growth ratio case. A few angles are close to 0$^\circ$ and 180$^\circ$. This is because of the sharp trailing edge of the geometry, which has to be dealt with using the corner collision algorithm described in section \ref{collisionSection}. Overall, the algorithm produces quad dominant meshes with a very few skinny cells.
+Table \ref{table-naca} shows the mesh parameters of the two cases shown in figure. In the higher growth ratio case, 96.22 percent of the angles in the mesh elements are between 45 and 135 degrees while for the lower growth ratio case, 97.38 percent of the angles are in that range. In figure \ref{fig-angle-distribution}, we plot the distribution of angles for the mesh elements. As can be seen from the distribution, for both the cases, most of the angles are within a 30$^\circ$ range of 90$^\circ$. The distribution is plotted on a log scale to highlight the variation from the mean value. The distribution of angles is more spread out for the higher growth ratio case due to a higher number of triangles in that case. A few angles are close to 0$^\circ$ and 180$^\circ$. This is because of the sharp trailing edge of the geometry, which has to be dealt with using the corner collision algorithm described in section \ref{collisionSection}. Overall, the algorithm produces quad dominant meshes with a very few skinny cells.
 
 \begin{figure}
 
@@ -521,13 +553,13 @@ Table \ref{table-naca} shows the mesh parameters of the two cases shown in figur
 
 \begin{subfigure}{0.4\textwidth}
 \centering
-\includegraphics[width = 0.9\linewidth]{meshCases/naca0018-x0.007-g1.05/endCap.eps}
+\includegraphics[width = 0.9\linewidth, trim={0 7cm  0 7cm},clip]{meshCases/naca0018-x0.007-g1.05/endCap.eps}
 \caption{}
 \label{fig-endCap-low}
 \end{subfigure}%
 \begin{subfigure}{0.4\textwidth}
 \centering
-\includegraphics[width=0.9\linewidth]{meshCases/naca0018-x0.007-g1.1/endCap.eps}
+\includegraphics[width=0.9\linewidth,trim={0 7cm  0 7cm},clip]{meshCases/naca0018-x0.007-g1.1/endCap.eps}
 \caption{}
 \label{fig-endCap-high}
 \end{subfigure}
@@ -573,11 +605,11 @@ Table \ref{table-naca} shows the mesh parameters of the two cases shown in figur
 \caption{}
 \label{fig-dist-high}
 \end{subfigure}
-\caption{Distribution of interior angles of the cells for the meshes generated for NACA 0018 airfoil. Most of the angles are around 90$^\circ$ with a very few skinny angles.}
+\caption{Distribution of interior angles of the cells for the meshes generated for NACA 0018 airfoil. Most of the angles of the cells in the mesh are around 90$^\circ$ with a very few skinny angles.}
 \label{fig-angle-distribution}
 \end{figure}
 
-To illustrate the robustness of the advancing layer algorihtm, we run it on a geometry which has surfaces with a variety of concave corners at their boundaries. Figure \ref{fig-variousAngle} shows the resultant meshes generated on such a geometry for two growth ratios- 1.04 and 1.08. It can be seen that the required anisotropic stretched elements are created at the boundary of the surface. Figure \ref{fig-variousAngle-corner-low} and \ref{fig-variousAngle-corner-high} show magnified view of a 30$^\circ$ concave corner in the mesh. Even though the mesh is advancing from the corner towards the surface interior, it successfully recovers the front at each iteration of the advancing layer routine. Also, the quality of the mesh elements remains consistent as the mesh grows from the boundary. Figure \ref{fig-va-angle-distribution} shows the distribution of interior angles of the mesh elements of these meshes. The distribution is more flattened out as there are more number of triangles in the mesh due to more number of concave corners. However, still, the number of skinny triangles in the mesh is negligible. The percentage of quads generated for the low growth ratio mesh is 96.43\% and for the high growth ratio mesh is 95.82\%. Hence, even though the mesh has a lot of concave corners, more than 95\% of the mesh elements are non-simplical quad elements.
+To illustrate the robustness of the advancing layer algorihtm, we run it on a geometry which has surfaces with a variety of concave corners at their boundaries. Figure \ref{fig-variousAngle} shows the resultant meshes generated on such a geometry for two growth ratios- 1.04 and 1.08. It can be seen that the required anisotropic stretched elements are created at the boundary of the surface. Figure \ref{fig-variousAngle-corner-low} and \ref{fig-variousAngle-corner-high} show magnified view of a 30$^\circ$ concave corner in the mesh. Even though the mesh is advancing from the corner towards the surface interior, it successfully recovers the front at each iteration of the advancing layer routine. Also, the quality of the mesh elements remains consistent as the mesh grows from the boundary. Figure \ref{fig-variousAngle-corner-low} and \ref{fig-variousAngle-corner-high} show a close up view of the 30$^\circ$ concave corner of the mesh. The boundary topology is successfully retained several layers into the advancing layer mesh generation process. Figure \ref{fig-va-angle-distribution} shows the distribution of interior angles of the mesh elements of these meshes. The distribution is more flattened out as there are higher number of triangles in the mesh due to more number of concave corners. However, still, the number of skinny triangles in the mesh is negligible. The percentage of quads generated for the low growth ratio mesh is 96.43\% and for the high growth ratio mesh is 95.82\%. Hence, even though the mesh has a lot of concave corners, more than 95\% of the mesh elements are non-simplical quad elements.
 
 \begin{figure}
 \centering
@@ -628,7 +660,8 @@ To illustrate the robustness of the advancing layer algorihtm, we run it on a ge
 \end{figure}
 
 
-We also illustrate the advancing layer mesh generation routine by generating a surface mesh from the geometry shown previously in Figure \ref{surf-segment}. The advancing layer surface mesh generated for the geometry is shown in Figure \ref{fig-joint}. The sub surface boundaries are highlighted in the figure. Highly stretched elements are created at the boundary of the geometry. As the mesh grows towards surface interior, the advancing layer grows in size, hence generating the required level of anisotropy at the boundaries. The aspect ratio for this mesh at the boundary varies with the boundary vertices but is set to be around 9-10. Various views of the surface mesh are shown in the figure. This illustrates that the mesh generator is capable of handling a variety of surface topologies. A close up view of colliding layers is shown in Figure \ref{fig-joint-closeUp}.The number of vertices in the advancing layer drop as the layers start to collide. Eventually, there are no vertices left on the layer to march and the surface mesh for the sub-surface is complete.
+We also illustrate the advancing layer mesh generation routine by generating a surface mesh from the geometry shown previously in Figure \ref{surf-segment}. The advancing layer surface mesh generated for the geometry is shown in Figure \ref{fig-joint}. The sub-surface boundaries are highlighted in the figure. Highly stretched elements are created at the boundary of the geometry. As the mesh grows towards surface interior, the advancing layer grows in size, hence generating the required level of anisotropy at the boundaries. The aspect ratio for this mesh at the boundary varies with the boundary vertices but is set to be around 9-10. Various views of the surface mesh are shown in the figure. This illustrates that the mesh generator is capable of handling a variety of surface topologies. A close up view of colliding layers is shown in Figure \ref{fig-joint-closeUp} . The number of vertices in the advancing layer drop as the layers start to collide. Eventually, there are no vertices left on the layer to march and the surface mesh for the sub-surface is complete.
+
 
 \begin{figure}[hbt!]
 \centering
@@ -674,7 +707,7 @@ We also illustrate the advancing layer mesh generation routine by generating a s
 
 \section{Conclusion}
 
-An advancing layer mesh generation algorithm was described in the paper. The algorithm takes an isotropic input triangulation of the surface and proceeds to produce an anisotropic mesh one layer at a time. The meshes produced by the algorithm are capable of creating a required level of anisotropy at well defined boundaries of the surface. It is capable of handling concave corners in the input surface. The mesh generator produces meshes with primarily rectangular quad elements and a few trianglular elements.% comment on quality of mesh generated.
+An advancing layer mesh generation algorithm was described in the paper. The algorithm takes an isotropic input triangulation of the surface and proceeds to produce a quad-dominant anisotropic mesh one layer at a time. The meshes produced by the algorithm have the required level of anisotropy at well defined boundaries of the surface. The mesh generator is capable of producing meshes from fairly complex surface topologies with multiple concave corners. It produces meshes with primarily rectangular quad elements and a few trianglular elements. The distribution of interior angles of the mesh generated is centered around 90$^\circ$ with less than 1\% of the angles below 20$^\circ$ or above 160$^\circ$. Anisotropic surface meshes produced from the algorithm could be used as a reasonable input to a three-dimensional mesh generator.% comment on quality of mesh generated.
 
 %Figure \ref{cyl-coarse} shows a cylindrical object with a coarse boundary and surface discretization. The object contains three sub-surfaces. These include the planar end caps of the cylinder and the curved cylindrical surface. The three sub-surfaces of the input triangulation are segmented and meshed  independently using the advancing front surface generation routine. Resultant mesh is shown in Figure \ref{cyl-coarse-mesh}. It can be seen that the boundary curves, that is the circular bounding curve of the sub-surfaces is preserved very well for several layers in the surface interior. Hence, the advancing layer surface mesh generation algorithm helps to preserve the boundary curve even for coarse initial surface discretization. Figure \ref{cyl-coarse-cap} and \ref{cyl-coarse-cap-mesh} show the initial triangulation and the final mesh for the end cap of the cylinder. 
 

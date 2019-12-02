@@ -584,7 +584,7 @@ Table \ref{table-naca} shows the mesh parameters of the two cases shown in figur
 \caption{\label{table-naca} Mesh parameters for NACA0018 Airfoil (chord length $c = 1$)}
 \centering
 \begin{tabular}{c|c|c|c|c|c}\hline
-\begin{tabular}[c]{@{}c@{}}extrusion \\ length\end{tabular} & \begin{tabular}[c]{@{}c@{}}growth \\ ratio\end{tabular} & \begin{tabular}[c]{@{}c@{}}number\\ of tris\end{tabular} & \begin{tabular}[c]{@{}c@{}}number\\ of quads\end{tabular} & \% quads & \begin{tabular}[c]{@{}c@{}}\% angles\\ between 45$^{\circ}$-135$^{\circ}$\end{tabular} \\ \hline
+\begin{tabular}[c]{@{}c@{}}extrusion \\ length\end{tabular} & \begin{tabular}[c]{@{}c@{}}growth \\ ratio\end{tabular} & \begin{tabular}[c]{@{}c@{}}number\\ of quads\end{tabular} & \begin{tabular}[c]{@{}c@{}}number\\ of tris \end{tabular} & \% quads & \begin{tabular}[c]{@{}c@{}}\% angles\\ between 45$^{\circ}$-135$^{\circ}$\end{tabular} \\ \hline
 0.007                                                       & 1.05                                                    & 3750                                                     & 162                                                      & 95.86 & 97.38                                                              \\
 0.007                                                       & 1.1                                                     & 2678                                                      & 198                                                       & 93.11 & 96.22               \\                                               
 \hline
@@ -609,7 +609,7 @@ Table \ref{table-naca} shows the mesh parameters of the two cases shown in figur
 \label{fig-angle-distribution}
 \end{figure}
 
-To illustrate the robustness of the advancing layer algorihtm, we run it on a geometry which has surfaces with a variety of concave corners at their boundaries. Figure \ref{fig-variousAngle} shows the resultant meshes generated on such a geometry for two growth ratios- 1.04 and 1.08. It can be seen that the required anisotropic stretched elements are created at the boundary of the surface. Figure \ref{fig-variousAngle-corner-low} and \ref{fig-variousAngle-corner-high} show magnified view of a 30$^\circ$ concave corner in the mesh. Even though the mesh is advancing from the corner towards the surface interior, it successfully recovers the front at each iteration of the advancing layer routine. Also, the quality of the mesh elements remains consistent as the mesh grows from the boundary. Figure \ref{fig-variousAngle-corner-low} and \ref{fig-variousAngle-corner-high} show a close up view of the 30$^\circ$ concave corner of the mesh. The boundary topology is successfully retained several layers into the advancing layer mesh generation process. Figure \ref{fig-va-angle-distribution} shows the distribution of interior angles of the mesh elements of these meshes. The distribution is more flattened out as there are higher number of triangles in the mesh due to more number of concave corners. However, still, the number of skinny triangles in the mesh is negligible. The percentage of quads generated for the low growth ratio mesh is 96.43\% and for the high growth ratio mesh is 95.82\%. Hence, even though the mesh has a lot of concave corners, more than 95\% of the mesh elements are non-simplical quad elements.
+To illustrate the robustness of the advancing layer algorihtm, we run it on a geometry which has surfaces with a variety of concave corners at their boundaries. Figure \ref{fig-variousAngle} shows the resultant meshes generated on such a geometry for two growth ratios- 1.04 and 1.08. It can be seen that the required anisotropic stretched elements are created at the boundary of the surface. Figure \ref{fig-variousAngle-corner-low} and \ref{fig-variousAngle-corner-high} show magnified view of a 30$^\circ$ concave corner in the mesh. Even though the mesh is advancing from the corner towards the surface interior, it successfully recovers the front at each iteration of the advancing layer routine. Also, the quality of the mesh elements remains consistent as the mesh grows from the boundary. The boundary topology is successfully retained several layers into the advancing layer mesh generation process. Figure \ref{fig-va-angle-distribution} shows the distribution of interior angles of the mesh elements of these meshes. The distribution is more flattened out as there are higher number of triangles in the mesh due to more number of concave corners. Still, the number of skinny triangles in the mesh is negligible. The percentage of quads generated for the low growth ratio mesh is 96.43\% and for the high growth ratio mesh is 95.82\%. Hence, even though the mesh has a lot of concave corners, more than 95\% of the mesh elements are non-simplical quad elements.
 
 \begin{figure}
 \centering
@@ -655,8 +655,8 @@ To illustrate the robustness of the advancing layer algorihtm, we run it on a ge
 \caption{}
 \label{fig-va-dist-high}
 \end{subfigure}
-\caption{Distribution of interior angles of the cells for the meshes generated for NACA 0018 airfoil. Most of the angles are around 90$^\circ$ with a very few skinny angles.}
-\label{fig-va-angle-distribution}
+\caption{Distribution of interior angles of the cells for the meshes generated for the geometry with a variety of concave corners (shown in figure \ref{fig-va-angle-distribution}). Most of the angles are in 45$^\circ$-135$^\circ$ range with a very few skinny traingles.}
+\label{fig-variousAngle}
 \end{figure}
 
 
